@@ -30,5 +30,5 @@ _FAKE_SEGMENT = "Jejdjdidjdjhidden_apjjsjdjskdi"
 TERABOX_API_KEY: str = os.getenv("TERABOX_API_KEY", "teamdev_jirvspco3y")
 TERABOX_API_BASE: str = os.getenv("TERABOX_API_BASE", "https://api.teamdev.sbs/v2/download")
 
-MONGO_URI: str = os.getenv("MONGO_URI", "mongodb+srv://ENCODE:ENCODE@cluster0.gkibxvp.mongodb.net/?appName=Cluster0")
+MONGO_URI: str = os.getenv("MONGO_URI", "mongodb+srv://AUTO:AUTO@cluster0.n6zfvxd.mongodb.net/?appName=Cluster0")
 MONGO_DB:  str = os.getenv("MONGO_DB",  "teamdev_downbot") # Make @YourTeam_DownBot 👌
