@@ -1,22 +1,14 @@
 """
            ───── ୨୧ ─────
                    TeamDev
-         ∘₊✧───────────✧₊∘   
-  
-   [Copyright ©️ 2026 TeamDev | @TEAM_X_OG All right reserved.]
-
-Project Name: All In One Downloader
-Project Discription: Download From Multiple Platforms Video Such As Terabox, Youtube, instagram, and much more!
-Project Number: 38
-Project By: @MR_ARMAN_08 | @TEAM_X_OG
-
-                   Developer Note:
-            Editing, Unauthorised Use, Or This Is Paid Script So Buy It From @MR_ARMAN_08 Then Use It As You Want!
 """
 
 import sys
 import logging
 import telebot
+import threading
+import os
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
 from config import BOT_TOKEN
 from TeamDev.core.database import init_db
@@ -26,6 +18,7 @@ from TeamDev.handlers import (
     register_admin_handlers,
 )
 
+# ---------------- LOGGING ----------------
 logging.basicConfig(
     level=logging.INFO,
     format="[%(asctime)s] %(levelname)s | %(name)s | %(message)s",
@@ -33,11 +26,27 @@ logging.basicConfig(
 )
 log = logging.getLogger("TeamDev")
 
+# ---------------- HEALTH SERVER (IMPORTANT) ----------------
+class HealthHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b"OK")
 
+def run_server():
+    port = int(os.environ.get("PORT", 8000))
+    server = HTTPServer(("0.0.0.0", port), HealthHandler)
+    log.info(f"[TeamDev] => Health server running on port {port}")
+    server.serve_forever()
+
+# ---------------- MAIN BOT ----------------
 def main():
     if not BOT_TOKEN:
         log.error("[TeamDev] => BOT_TOKEN not set — aborting.")
         sys.exit(1)
+
+    # 👉 Start health server (Railway fix)
+    threading.Thread(target=run_server, daemon=True).start()
 
     log.info("[TeamDev] => Connecting to MongoDB and creating indexes...")
     init_db()
@@ -57,7 +66,6 @@ def main():
         long_polling_timeout=20,
         logger_level=logging.WARNING,
     )
-
 
 if __name__ == "__main__":
     main()
